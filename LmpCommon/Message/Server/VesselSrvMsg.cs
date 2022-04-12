@@ -42,8 +42,10 @@ namespace LmpCommon.Message.Server
 
         private bool IsUnreliableMessage()
         {
-            return Data.SubType == (ushort)VesselMessageType.Position || Data.SubType == (ushort)VesselMessageType.Flightstate
-                   || Data.SubType == (ushort)VesselMessageType.Update || Data.SubType == (ushort)VesselMessageType.Resource;
+            // Resource updates can be bigger than Lidgren's limit of 65535 bits (8191 bytes) for unreliable messages
+            return Data.SubType == (ushort)VesselMessageType.Position
+                   || Data.SubType == (ushort)VesselMessageType.Flightstate
+                   || Data.SubType == (ushort)VesselMessageType.Update;
         }
     }
 }

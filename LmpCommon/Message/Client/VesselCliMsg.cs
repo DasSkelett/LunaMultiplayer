@@ -43,8 +43,9 @@ namespace LmpCommon.Message.Client
 
         private bool IsUnreliableMessage()
         {
-            return Data.SubType == (ushort)VesselMessageType.Position || Data.SubType == (ushort)VesselMessageType.Flightstate
-                   || Data.SubType == (ushort)VesselMessageType.Update || Data.SubType == (ushort)VesselMessageType.Resource;
+            return Data.SubType == (ushort)VesselMessageType.Position
+                   || Data.SubType == (ushort)VesselMessageType.Flightstate
+                   || Data.SubType == (ushort)VesselMessageType.Update;
         }
     }
 }

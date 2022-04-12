@@ -59,6 +59,17 @@ namespace Lidgren.Network
 				return NetSendResult.Dropped;
 			}
 
+			// Per https://github.com/space-wizards/lidgren-network-gen3/commit/e24f1a7848e1e82c02c1f3ec0587d4e4968aad3c
+			// by @PJB3005, MIT
+			if (message.LengthBits >= ushort.MaxValue
+			    && m_connection.m_peerConfiguration.UnreliableSizeBehaviour == NetUnreliableSizeBehaviour.IgnoreMTU)
+			{
+				// drop message
+				this.m_connection.m_peer.LogError(
+					$"Unreliable message max size exceeded: {message.LengthBits} bits (max {ushort.MaxValue})");
+				return NetSendResult.Dropped;
+			}
+
 			m_queuedSends.Enqueue(message);
 			m_connection.m_peer.m_needFlushSendQueue = true; // a race condition to this variable will simply result in a single superflous call to FlushSendQueue()
 			return NetSendResult.Sent;
