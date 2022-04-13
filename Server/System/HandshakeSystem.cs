@@ -7,6 +7,7 @@ using Server.Context;
 using Server.Log;
 using Server.Plugin;
 using Server.Server;
+using System.Linq;
 
 namespace Server.System
 {
@@ -16,6 +17,13 @@ namespace Server.System
 
         public void HandleHandshakeRequest(ClientStructure client, HandshakeRequestMsgData data)
         {
+            if (ServerContext.Clients.Any(c => c.Value.UniqueIdentifier == data.UniqueIdentifier))
+            {
+                // Client already connected
+                LunaLog.Debug($"Ignoring handshake request from already connected client {data.PlayerName} ({data.UniqueIdentifier}");
+                return;
+            }
+
             var valid = CheckServerFull(client);
             valid &= valid && CheckUsernameLength(client, data.PlayerName);
             valid &= valid && CheckUsernameCharacters(client, data.PlayerName);
