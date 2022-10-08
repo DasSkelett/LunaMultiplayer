@@ -17,6 +17,7 @@ using Server.Web;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -41,6 +42,10 @@ namespace Server
         {
             try
             {
+                var ci = new CultureInfo("en-US");
+                Thread.CurrentThread.CurrentCulture = ci;
+                Thread.CurrentThread.CurrentUICulture = ci;
+
                 if (Common.PlatformIsWindows())
                     Console.Title = $"LMP {LmpVersioning.CurrentVersion}";
 
